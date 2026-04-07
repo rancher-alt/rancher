@@ -240,6 +240,13 @@ var (
 		true,
 		true,
 	)
+	ProxyInsecureHTTPS = newFeature(
+		"proxy-insecure-https",
+		"Allowing proxying to hosts with invalid TLS certificates. This should only be used for testing and is not recommended for production environments",
+		false,
+		true,
+		true,
+	)
 )
 
 func ListEnabled() []string {
