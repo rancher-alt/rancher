@@ -13,6 +13,7 @@ import (
 	prov "github.com/rancher/rancher/pkg/apis/provisioning.cattle.io/v1"
 	"github.com/rancher/rancher/pkg/controllers/management/cluster"
 	provcluster "github.com/rancher/rancher/pkg/controllers/provisioningv2/cluster"
+	"github.com/rancher/rancher/pkg/features"
 	mgmtv3 "github.com/rancher/rancher/pkg/generated/controllers/management.cattle.io/v3"
 	provv1 "github.com/rancher/rancher/pkg/generated/controllers/provisioning.cattle.io/v1"
 	v1 "github.com/rancher/rancher/pkg/generated/norman/core/v1"
@@ -139,6 +140,11 @@ func NewProxy(prefix string, validHosts Supplier, scaledContext *config.ScaledCo
 		provClustersCache:  scaledContext.Wrangler.Provisioning.Cluster().Cache(),
 	}
 
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	if features.ProxyInsecureHTTPS.Enabled() {
+		transport.TLSClientConfig.InsecureSkipVerify = true
+	}
+
 	return &httputil.ReverseProxy{
 		Director: func(req *http.Request) {
 			if err := p.proxy(req); err != nil {
@@ -146,6 +152,7 @@ func NewProxy(prefix string, validHosts Supplier, scaledContext *config.ScaledCo
 			}
 		},
 		ModifyResponse: setModifiedHeaders,
+		Transport:      transport,
 	}, nil
 }
 

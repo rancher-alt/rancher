@@ -95,7 +95,7 @@ var (
 	Harvester = newFeature(
 		"harvester",
 		"Enable Harvester integration, with ability to import and manage Harvester clusters",
-		true,
+		false,
 		true,
 		true)
 	RKE1CustomNodeCleanup = newFeature(
@@ -209,6 +209,13 @@ var (
 		false,
 		false,
 		true,
+	)
+	ProxyInsecureHTTPS = newFeature(
+		"proxy-insecure-https",
+		"Allowing proxying to hosts with invalid TLS certificates. This should only be used for testing and is not recommended for production environments",
+		false,
+		true,
+		false,
 	)
 )
 
