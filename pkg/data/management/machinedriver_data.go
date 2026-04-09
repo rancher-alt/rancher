@@ -102,8 +102,11 @@ var DriverData = map[string]DriverDataConfig{
 		PrivateCredentialFields: []string{"secretKey", "password", "token"},
 	},
 	OpenstackDriver: {
-		FileToFieldAliases:      map[string]string{"cacert": "cacert", "privateKeyFile": "privateKeyFile", "userDataFile": "userDataFile"},
-		PrivateCredentialFields: []string{"password"},
+		FileToFieldAliases:       map[string]string{"cacert": "cacert", "privateKeyFile": "privateKeyFile", "userDataFile": "userDataFile"},
+		PrivateCredentialFields:  []string{"password", "applicationCredentialSecret"},
+		PublicCredentialFields:   []string{"username", "authUrl", "useAppCred", "applicationCredentialId", "domainName", "tenantName", "tenantDomainName", "region"},
+		OptionalCredentialFields: []string{"useAppCred"},
+		PasswordFields:           []string{"password", "applicationCredentialSecret"},
 	},
 	PacketDriver: {
 		FileToFieldAliases:      map[string]string{"userdata": "userdata"},
@@ -200,7 +203,7 @@ func addMachineDrivers(management *config.ManagementContext) error {
 	if err := addMachineDriver(OCIDriver, "https://github.com/rancher-plugins/rancher-machine-driver-oci/releases/download/v1.3.0/docker-machine-driver-oci-linux", "", "0a1afa6a0af85ecf3d77cc554960e36e1be5fd12b22b0155717b9289669e4021", []string{"*.oraclecloud.com"}, false, false, false, nil, management); err != nil {
 		return err
 	}
-	if err := addMachineDriver(OpenstackDriver, "local://", "", "", nil, false, true, false, nil, management); err != nil {
+	if err := addMachineDriver(OpenstackDriver, "local://", "", "", nil, true, true, true, nil, management); err != nil {
 		return err
 	}
 	if err := addMachineDriver(OTCDriver, "https://otc-rancher.obs.eu-de.otc.t-systems.com/node/driver/0.3.3/docker-machine-driver-otc_0.3.3_linux_amd64.tar.gz", "https://otc-rancher.obs.eu-de.otc.t-systems.com/node/ui/1.0.2/component.js", "2151670a96e3ee71aedcfb5a1b73804a4772c3f9ca7f714f2a572d3868a648d1", []string{"*.otc.t-systems.com"}, false, false, false, nil, management); err != nil {
@@ -270,7 +273,8 @@ func AddHarvesterMachineDriver(mgmt *config.ManagementContext) error {
 }
 
 func addMachineDriver(name, url, uiURL, checksum string, whitelist []string, createActive, builtin,
-	addCloudCredential bool, updateActive *bool, management *config.ManagementContext) error {
+	addCloudCredential bool, updateActive *bool, management *config.ManagementContext,
+) error {
 	cli := management.Management.NodeDrivers("")
 	lister := cli.Controller().Lister()
 	m, err := lister.Get("", name)
