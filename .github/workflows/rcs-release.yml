@@ -9,12 +9,13 @@ permissions:
 
 env:
   COMMIT: ${{ github.sha }}
-  DOCKERIO_REGISTRY: "docker.io"
   AWS_DEFAULT_REGION: "us-east-1"
   REPOSITORY_OWNER: ${{ github.repository_owner }}
   IMAGE: ${{ github.repository_owner }}/rancher
   IMAGE_AGENT: ${{ github.repository_owner }}/rancher-agent
   IMAGE_INSTALLER: ${{ github.repository_owner }}/system-agent-installer-rancher
+  REGISTRY: "ghcr.io"
+  GH_CLI_VERSION: "2.72.0"
 jobs:
   unit-tests:
     uses: ./.github/workflows/unit-test.yml
@@ -69,6 +70,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     env:
       ARCH: ${{ matrix.arch }}
       OS: ${{ matrix.os }}
@@ -77,13 +79,6 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
-      - name: Load Secrets from Vault
-        uses: rancher-eio/read-vault-secrets@0da85151ad1f19ed7986c41587e45aac1ace74b6 # v3
-        with:
-          secrets: |
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials registry | REGISTRY;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | DOCKER_USERNAME;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | DOCKER_PASSWORD;
       - name: push
         uses: ./.github/actions/push-images
   build-publish-chart:
@@ -129,6 +124,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     env:
       ARCH: ${{ matrix.arch }}
       OS: ${{ matrix.os }}
@@ -137,13 +133,6 @@ jobs:
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
-      - name: Load Secrets from Vault
-        uses: rancher-eio/read-vault-secrets@0da85151ad1f19ed7986c41587e45aac1ace74b6 # v3
-        with:
-          secrets: |
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials registry | REGISTRY;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | DOCKER_USERNAME;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | DOCKER_PASSWORD;
       - name: build
         uses: ./.github/actions/build-images/installer
   merge-server-agent-installer-manifests:
@@ -152,25 +141,19 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
-      - name: Load Secrets from Vault
-        uses: rancher-eio/read-vault-secrets@0da85151ad1f19ed7986c41587e45aac1ace74b6 # v3
-        with:
-          secrets: |
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials registry | REGISTRY;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials username | DOCKER_USERNAME;
-            secret/data/github/repo/${{ github.repository }}/rancher-prime-stg-registry/credentials password | DOCKER_PASSWORD;
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
-      - name: Login to Docker Registry
+      - name: Login to GHCR
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
           registry: ${{ env.REGISTRY }}
       - name: merge server manifests
         with:

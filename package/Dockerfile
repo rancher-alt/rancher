@@ -324,7 +324,7 @@ RUN mkdir -p /var/lib/rancher/k3s/agent/images/ && \
     mkdir -p /var/lib/rancher-data/driver-metadata && \
     rm /tmp/etcd.tar.gz
 
-ENV CATTLE_DASHBOARD_UI_VERSION=v2.15.1
+ENV CATTLE_DASHBOARD_UI_VERSION=v2.15.1-openstack
 
 ENV CATTLE_CLI_VERSION=v2.15.1
 
@@ -353,7 +353,7 @@ RUN mkdir -p /usr/share/rancher/ui-dashboard/api-ui && \
     curl -sL "https://releases.rancher.com/api-ui/${CATTLE_API_UI_VERSION}.tar.gz" | tar xvzf - --strip-components=1 && \
     mkdir -p /usr/share/rancher/ui-dashboard/dashboard && \
     cd /usr/share/rancher/ui-dashboard/dashboard && \
-    curl -sL "https://releases.rancher.com/dashboard/${CATTLE_DASHBOARD_UI_VERSION}.tar.gz" | tar xvzf - --strip-components=2 && \
+    curl -sL https://github.com/rancher-alt/dashboard/releases/download/${CATTLE_DASHBOARD_UI_VERSION}/${CATTLE_DASHBOARD_UI_VERSION}.tar.gz | tar xvzf - --strip-components=2 && \
     ln -s dashboard/index.html ../index.html && \
     ln -s dashboard/robots.txt ../robots.txt && \
     ln -s dashboard/humans.txt ../humans.txt && \

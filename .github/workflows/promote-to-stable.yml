@@ -7,7 +7,7 @@ on:
         description: "e.g: v2.8.4"
         required: true
 env:
-  REGISTRY: "docker.io"
+  REGISTRY: "ghcr.io"
   IMAGE: ${{ github.repository }}
   TAG: ${{ github.event.inputs.tag }}
   GIT_TAG: ${{ github.event.inputs.tag }}
@@ -19,15 +19,10 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
     steps:
-      - name: Load Secrets from Vault
-        uses: rancher-eio/read-vault-secrets@0da85151ad1f19ed7986c41587e45aac1ace74b6 # v3
-        with:
-          secrets: |
-            secret/data/github/repo/${{ github.repository }}/dockerhub/rancher/credentials username | DOCKER_USERNAME ;
-            secret/data/github/repo/${{ github.repository }}/dockerhub/rancher/credentials password | DOCKER_PASSWORD
       - name: Skopeo login
-        run: echo "${DOCKER_PASSWORD}" | skopeo login "${REGISTRY}" --username "${DOCKER_USERNAME}" --password-stdin
+        run: echo ${{ github.token }} | skopeo login ${{ env.REGISTRY }} --username ${{ github.actor }} --password-stdin
       - name: Copy image to latest
         run: skopeo copy "docker://${REGISTRY}/${IMAGE}:${TAG}" "docker://${REGISTRY}/${IMAGE}:latest" --all
       - name: Copy image to stable
