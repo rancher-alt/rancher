@@ -36,7 +36,7 @@ jobs:
       matrix:
         os: [linux]
         arch: [x64]
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     env:
       ARCH: ${{ matrix.arch }}
       OS: ${{ matrix.os }}
