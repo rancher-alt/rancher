@@ -46,7 +46,7 @@ jobs:
       - name: setup and build
         uses: ./.github/actions/build-images/agent
   push-images:
-    needs: [unit-tests]
+    needs: [build-server, build-agent, unit-tests]
     strategy:
       matrix:
         os: [linux]
