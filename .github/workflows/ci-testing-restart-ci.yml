@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   restart-ci:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: github.event.workflow_run.head_repository.full_name == github.repository
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

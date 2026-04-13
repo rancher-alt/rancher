@@ -13,7 +13,7 @@ env:
   GIT_TAG: ${{ github.event.inputs.tag }}
 jobs:
   promote-docker-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: ghcr.io/rancher/ci-image/go1.26
     permissions:
@@ -28,7 +28,7 @@ jobs:
       - name: Copy image to stable
         run: skopeo copy "docker://${REGISTRY}/${IMAGE}:${TAG}" "docker://${REGISTRY}/${IMAGE}:stable" --all
   promote-chart:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: ghcr.io/rancher/ci-image/go1.26
     permissions:
@@ -65,7 +65,7 @@ jobs:
             cache-control: public,no-cache,proxy-revalidate
   update-readme:
     needs: [promote-docker-image, promote-chart]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: ghcr.io/rancher/ci-image/go1.26
     permissions:

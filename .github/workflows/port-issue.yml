@@ -10,7 +10,7 @@ permissions: {}
 
 jobs:
   port-issue:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: startsWith(github.event.comment.body, '/backport') || startsWith(github.event.comment.body, '/forwardport')
     steps:
       - name: Check org membership

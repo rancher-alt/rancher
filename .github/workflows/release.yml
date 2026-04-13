@@ -23,7 +23,7 @@ jobs:
   unit-tests:
     uses: ./.github/workflows/unit-test.yml
   build-server:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         os: [linux]
@@ -43,7 +43,7 @@ jobs:
       matrix:
         os: [linux]
         arch: [x64]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       ARCH: ${{ matrix.arch }}
       OS: ${{ matrix.os }}
@@ -65,7 +65,7 @@ jobs:
       matrix:
         os: [linux]
         arch: [x64]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
@@ -82,7 +82,7 @@ jobs:
         uses: ./.github/actions/push-images
   build-publish-chart:
     needs: [push-images]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: ghcr.io/rancher/ci-image/go1.26
     permissions:
       contents: read
@@ -109,7 +109,7 @@ jobs:
       - name: publish
         uses: ./.github/actions/rancher-chart/publish-gcp
   build-installer:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         os: [linux]
@@ -130,7 +130,7 @@ jobs:
         uses: ./.github/actions/build-images/installer
   merge-server-agent-installer-manifests:
     needs: [push-images, build-installer]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
@@ -161,7 +161,7 @@ jobs:
           image: "${{ env.IMAGE_INSTALLER }}"
         uses: ./.github/actions/merge-manifests
   create-images-files:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: ghcr.io/rancher/ci-image/go1.26:latest
     permissions:
       contents: read
@@ -192,7 +192,7 @@ jobs:
           name: images-files
           path: /tmp/artifacts
   docker-image-digests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: ghcr.io/rancher/ci-image/go1.26
     needs: [create-images-files, merge-server-agent-installer-manifests]
     env:
@@ -238,7 +238,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-<<<<<<< HEAD
         with:
           persist-credentials: false
       - name: Setup Environment Variables
@@ -307,9 +306,3 @@ jobs:
             secret/data/github/repo/${{ github.repository }}/slack/rancher-notify-release-bot/credentials webhookUrl | WEBHOOK_URL;
       - name: notify
         uses: ./.github/actions/notify-release
-=======
-      - name: generate
-        uses: ./.github/actions/images-digests/generate
-      - name: publish to gh
-        uses: ./.github/actions/images-digests/publish-gh
->>>>>>> update to use github token
