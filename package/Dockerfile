@@ -147,7 +147,7 @@ WORKDIR /var/lib/rancher
 
 ARG ARCH
 ARG ETCD_UNSUPPORTED_ARCH
-ARG IMAGE_REPO=ghcr.io/rancher-alt/rancher
+ARG IMAGE_REPO=ghcr.io/rancher-alt
 ARG IMAGE_NAME=rancher
 ARG CHART_DEFAULT_BRANCH
 ARG PARTNER_CHART_DEFAULT_BRANCH
@@ -469,7 +469,7 @@ RUN curl -sLf https://dl.k8s.io/${KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl > /
 
 LABEL io.cattle.agent=true
 
-ARG RANCHER_REPO=ghcr.io/rancher-alt/rancher
+ARG RANCHER_REPO=ghcr.io/rancher-alt
 ARG VERSION
 ENV AGENT_IMAGE=${RANCHER_REPO}/rancher-agent:${VERSION}
 # For now, this value needs to be manually synced with the one in the main Dockerfile. This pins downstream webhook's version.
