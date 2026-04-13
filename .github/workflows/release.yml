@@ -188,6 +188,7 @@ jobs:
           name: images-files
           path: /tmp/artifacts
   docker-image-digests:
+    if: ${{ false }}
     runs-on: ubuntu-22.04
     container: ghcr.io/rancher/ci-image/go1.26
     needs: [create-images-files, merge-server-agent-installer-manifests]
