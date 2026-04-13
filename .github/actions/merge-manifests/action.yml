@@ -16,8 +16,7 @@ runs:
       run: |
         docker buildx imagetools create \
           --tag "${REGISTRY}/${IMAGE}:${TAG}" \
-          "${REGISTRY}/${IMAGE}:${TAG}-amd64" \
-          "${REGISTRY}/${IMAGE}:${TAG}-arm64"
+          "${REGISTRY}/${IMAGE}:${TAG}-amd64"
     - name: Create head manifest list and push
       shell: bash
       env:
@@ -26,8 +25,7 @@ runs:
         if [[ "${GITHUB_REF_NAME}" == release/v* ]] || [[ "${GITHUB_REF_NAME}" == "main" ]]; then
           docker buildx imagetools create \
             --tag ${REGISTRY}/${IMAGE}:${HEAD_TAG} \
-            ${REGISTRY}/${IMAGE}:${TAG}-amd64 \
-            ${REGISTRY}/${IMAGE}:${TAG}-arm64
+            ${REGISTRY}/${IMAGE}:${TAG}-amd64
         fi
     - name: Inspect image
       shell: bash
