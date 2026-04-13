@@ -296,7 +296,7 @@ func addMachineDriver(name, url, uiURL, checksum string, whitelist []string, cre
 		n.Spec.UIURL = uiURL
 		n.Spec.Checksum = checksum
 		n.Spec.DisplayName = name
-		n.Spec.WhitelistDomains = whitelist
+		n.Spec.WhitelistDomains = append(n.Spec.WhitelistDomains, whitelist...)
 		if !reflect.DeepEqual(m, n) {
 			logrus.Infof("Updating node driver %v", name)
 			_, err := cli.Update(n)
