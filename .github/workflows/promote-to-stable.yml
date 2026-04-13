@@ -13,7 +13,7 @@ env:
   GIT_TAG: ${{ github.event.inputs.tag }}
 jobs:
   promote-docker-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: quay.io/skopeo/stable:v1.15
     permissions:
@@ -28,7 +28,7 @@ jobs:
       - name: Copy image to stable
         run: skopeo copy docker://${{ env.REGISTRY }}/${{ env.IMAGE }}:${{ env.TAG }} docker://${{ env.REGISTRY }}/${{ env.IMAGE }}:stable --all
   promote-chart:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
@@ -68,7 +68,7 @@ jobs:
             cache-control: public,no-cache,proxy-revalidate
   update-readme:
     needs: [promote-docker-image, promote-chart]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
       pull-requests: write

@@ -16,7 +16,7 @@ jobs:
   unit-tests:
     uses: ./.github/workflows/unit-test.yml
   build-server:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         os: [linux]
@@ -34,7 +34,7 @@ jobs:
       matrix:
         os: [linux]
         arch: [x64]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       ARCH: ${{ matrix.arch }}
       OS: ${{ matrix.os }}
@@ -54,7 +54,7 @@ jobs:
       matrix:
         os: [linux]
         arch: [x64]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
@@ -69,7 +69,7 @@ jobs:
         uses: ./.github/actions/push-images
   build-publish-chart:
     needs: [push-images]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: registry.suse.com/bci/bci-base:15.7
     permissions:
       contents: read
@@ -105,7 +105,7 @@ jobs:
           CHARTS_DISTRIBUTION_ID: EKGBR3PUZ9J56
         uses: ./.github/actions/rancher-chart/publish-aws
   build-installer:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         os: [linux]
@@ -124,7 +124,7 @@ jobs:
         uses: ./.github/actions/build-images/installer
   merge-server-agent-installer-manifests:
     needs: [push-images, build-installer]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       id-token: write
