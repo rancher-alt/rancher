@@ -65,6 +65,7 @@ jobs:
       - name: push
         uses: ./.github/actions/push-images
   build-publish-chart:
+    if: ${{ false }}
     needs: [push-images]
     runs-on: ubuntu-22.04
     container: registry.suse.com/bci/bci-base:15.7

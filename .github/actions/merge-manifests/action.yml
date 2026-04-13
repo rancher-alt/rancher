@@ -14,16 +14,14 @@ runs:
       run: |
         docker buildx imagetools create \
           --tag ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }} \
-          ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }}-amd64 \
-          ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }}-arm64
+          ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }}-amd64 
     - name: Create head manifest list and push
       shell: bash
       run: |
         if [[ "${{ github.ref_name }}" == release/v* ]] || [[ "${{ github.ref_name }}" == "main" ]]; then
           docker buildx imagetools create \
             --tag ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.HEAD_TAG }} \
-            ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }}-amd64 \
-            ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }}-arm64
+            ${{ env.REGISTRY}}/${{ inputs.image }}:${{ env.TAG }}-amd64 
         fi
     - name: Inspect image
       shell: bash
