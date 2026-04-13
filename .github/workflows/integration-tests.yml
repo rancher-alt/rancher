@@ -47,7 +47,7 @@ jobs:
             exit 1
           fi
 
-          AMD_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "rancher/rancher:.*amd64.*$" | head -n 1)
+          AMD_IMAGE=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "rancher-alt/rancher:.*amd64.*$" | head -n 1)
           echo "the image created is $AMD_IMAGE"
           docker tag "$image_server_id" "${IMAGE}:${TAG}"
           docker image ls
@@ -61,7 +61,7 @@ jobs:
             exit 1
           fi
 
-          AMD_IMAGE_AGENT=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "rancher/rancher-agent:.*amd64.*$" | head -n 1)
+          AMD_IMAGE_AGENT=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -E "rancher-alt/rancher-agent:.*amd64.*$" | head -n 1)
           docker tag "$image_agent_id" "${IMAGE_AGENT}:${TAG}"
           echo "the image created is $AMD_IMAGE_AGENT"
           docker image ls
