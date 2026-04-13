@@ -161,6 +161,7 @@ jobs:
       - name: publish to gh
         uses: ./.github/actions/images-files/publish-gh
   docker-image-digests:
+    if: ${{ false }}
     runs-on: ubuntu-22.04
     container: registry.suse.com/bci/bci-base:15.7
     needs: [create-images-files, merge-server-agent-installer-manifests]
