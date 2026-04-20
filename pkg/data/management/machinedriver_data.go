@@ -103,10 +103,10 @@ var DriverData = map[string]DriverDataConfig{
 	},
 	OpenstackDriver: {
 		FileToFieldAliases:       map[string]string{"cacert": "cacert", "privateKeyFile": "privateKeyFile", "userDataFile": "userDataFile"},
-		PrivateCredentialFields:  []string{"password", "applicationCredentialSecret"},
+		PrivateCredentialFields:  []string{"password", "applicationCredentialSecret", "privateKeyFile"},
 		PublicCredentialFields:   []string{"username", "authUrl", "useAppCred", "applicationCredentialId", "domainName", "tenantName", "tenantDomainName", "region"},
 		OptionalCredentialFields: []string{"useAppCred"},
-		PasswordFields:           []string{"password", "applicationCredentialSecret"},
+		PasswordFields:           []string{"password", "applicationCredentialSecret", "privateKeyFile"},
 	},
 	PacketDriver: {
 		FileToFieldAliases:      map[string]string{"userdata": "userdata"},
